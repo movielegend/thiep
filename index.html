@@ -3,262 +3,286 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chúc Mừng Năm Mới 2026</title>
+<title>Tết 2026</title>
+
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Be+Vietnam+Pro:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
-body {
-    margin: 0;
-    min-height: 100vh;
-    background: radial-gradient(circle at top, #b30000, #660000);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: 'Segoe UI', sans-serif;
-    overflow: hidden;
+body{
+    margin:0;
+    overflow:hidden;
+    font-family:'Be Vietnam Pro', sans-serif;
 }
 
-/* Canvas */
-canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
+/* ===== BACKGROUND ===== */
+.bg{
+    position:fixed;
+    width:100%;
+    height:100%;
+    background:url("Gemini_Generated_Image_r748z5r748z5r748.png") no-repeat center center;
+    background-size:cover;
+    z-index:0;
 }
 
-/* Layer */
-#fireworks { z-index: 0; }
-#sakura { z-index: 1; }
-
-/* Thiệp */
-.card {
-    background: radial-gradient(circle, #ffef9a, #ffd700);
-    width: 380px;
-    max-width: 90vw;
-    padding: 32px;
-    border-radius: 25px;
-    text-align: center;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-    position: relative;
-    z-index: 2;
+canvas{
+    position:fixed;
+    top:0;
+    left:0;
+    z-index:1;
 }
 
-h1 {
-    color: #b30000;
-    font-size: 32px;
+/* ===== NÚT ===== */
+.wish-btn{
+    position:fixed;
+    bottom:30px;
+    left:50%;
+    transform:translateX(-50%);
+    padding:14px 28px;
+    font-size:18px;
+    font-weight:600;
+    background:linear-gradient(45deg,#ffd700,#ffcc00);
+    border:none;
+    border-radius:30px;
+    cursor:pointer;
+    z-index:5;
+    box-shadow:0 5px 20px rgba(0,0,0,0.4);
+    letter-spacing:1px;
 }
 
-h2 {
-    color: #cc0000;
-    margin: 14px 0;
-    font-size: 20px;
+/* ===== POPUP ===== */
+.popup{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.6);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    visibility:hidden;
+    opacity:0;
+    transition:0.3s;
+    z-index:20;
 }
 
-p {
-    color: #800000;
-    line-height: 1.6;
-    font-size: 16px;
+.popup.show{
+    visibility:visible;
+    opacity:1;
 }
 
-.year {
-    margin-top: 22px;
-    font-size: 40px;
-    font-weight: bold;
-    color: #b30000;
+.popup-content{
+    background:linear-gradient(#fff3b0,#ffd700);
+    padding:35px;
+    border-radius:25px;
+    text-align:center;
+    max-width:420px;
+    box-shadow:0 20px 50px rgba(0,0,0,0.5);
+    animation:zoomIn 0.4s ease;
 }
 
-.footer {
-    margin-top: 18px;
-    font-style: italic;
-    color: #660000;
-    font-size: 14px;
+@keyframes zoomIn{
+    from{transform:scale(0.7);opacity:0;}
+    to{transform:scale(1);opacity:1;}
 }
 
-/* ===== MOBILE ===== */
-@media (max-width: 480px) {
-    .card {
-        padding: 24px;
-        border-radius: 20px;
-    }
+.popup h2{
+    font-family:'Dancing Script', cursive;
+    font-size:34px;
+    color:#b30000;
+    margin-bottom:15px;
+}
 
-    h1 {
-        font-size: 26px;
-    }
+.popup p{
+    font-size:18px;
+    line-height:1.6;
+}
 
-    h2 {
-        font-size: 18px;
-    }
+.close-btn{
+    margin-top:20px;
+    padding:8px 16px;
+    border:none;
+    border-radius:15px;
+    background:#d40000;
+    color:white;
+    cursor:pointer;
+}
 
-    p {
-        font-size: 15px;
-    }
-
-    .year {
-        font-size: 34px;
+/* Mobile tối ưu */
+@media (max-width:768px){
+    .popup-content{
+        width:85%;
+        padding:25px;
     }
 }
 </style>
 </head>
-
 <body>
 
-<canvas id="fireworks"></canvas>
-<canvas id="sakura"></canvas>
+<div class="bg"></div>
+<canvas id="effects"></canvas>
 
-<div class="card">
-    <h1>🎉 Chúc Mừng Năm Mới 🎉</h1>
-    <h2>An Khang – Thịnh Vượng</h2>
-    <p>
-        Chúc bạn và gia đình<br>
-        Sức khỏe dồi dào – Tài lộc đầy nhà<br>
-        Vạn sự như ý – Muôn điều may mắn
-    </p>
-    <div class="year">2026</div>
-    <div class="footer">🌸 Happy New Year 🌸</div>
+<!-- Nhạc -->
+<audio id="music" autoplay loop>
+    <source src="motnammoibinhanh.mp3" type="audio/mpeg">
+</audio>
+
+<!-- Nút -->
+<button class="wish-btn" onclick="openWish()">Nhận Lời Chúc</button>
+
+<!-- Popup -->
+<div class="popup" id="popup">
+    <div class="popup-content">
+        <h2>🌸 Lời Chúc Năm Mới 🌸</h2>
+        <p>
+           Chúc bạn năm 2026<br>
+          Xuân về vạn điều như ý<br>
+          Gia đạo bình an – Phúc lộc đầy nhà<br>
+          Sức khỏe dồi dào – Công danh tấn phát<br>
+          Hạnh phúc viên mãn – Thành công rực rỡ 🎆
+
+        </p>
+        <button class="close-btn" onclick="closeWish()">Đóng</button>
+    </div>
 </div>
 
 <script>
-const fw = document.getElementById("fireworks");
-const fwCtx = fw.getContext("2d");
-const sk = document.getElementById("sakura");
-const skCtx = sk.getContext("2d");
+const canvas=document.getElementById("effects");
+const ctx=canvas.getContext("2d");
 
-function resize() {
-    fw.width = sk.width = window.innerWidth;
-    fw.height = sk.height = window.innerHeight;
+function resize(){
+    canvas.width=window.innerWidth;
+    canvas.height=window.innerHeight;
 }
-window.addEventListener("resize", resize);
+window.addEventListener("resize",resize);
 resize();
 
-/* ===== PHÁO HOA (nhẹ cho mobile) ===== */
-class Firework {
-    constructor() {
-        this.x = Math.random() * fw.width;
-        this.y = fw.height;
-        this.targetY = Math.random() * fw.height * 0.45;
-        this.color = `hsl(${Math.random()*360},100%,60%)`;
-        this.speed = 6;
-        this.exploded = false;
-        this.particles = [];
+/* ===== PHÁO HOA ===== */
+class Firework{
+    constructor(x=null,y=null){
+        this.x=x ?? Math.random()*canvas.width;
+        this.y=canvas.height;
+        this.targetY=y ?? Math.random()*canvas.height*0.6;
+        this.color=`hsl(${Math.random()*360},100%,60%)`;
+        this.exploded=false;
+        this.particles=[];
+        this.speed=7;
     }
-    update() {
-        if (!this.exploded) {
-            this.y -= this.speed;
-            if (this.y <= this.targetY) {
-                this.exploded = true;
-                const count = window.innerWidth < 500 ? 45 : 70;
-                for (let i = 0; i < count; i++) {
-                    this.particles.push(new Particle(this.x, this.y, this.color));
+    update(){
+        if(!this.exploded){
+            this.y-=this.speed;
+            if(this.y<=this.targetY){
+                this.exploded=true;
+                for(let i=0;i<70;i++){
+                    this.particles.push(new Particle(this.x,this.y,this.color));
                 }
             }
         }
     }
-    draw() {
-        if (!this.exploded) {
-            fwCtx.fillStyle = this.color;
-            fwCtx.beginPath();
-            fwCtx.arc(this.x, this.y, 3, 0, Math.PI * 2);
-            fwCtx.fill();
+    draw(){
+        if(!this.exploded){
+            ctx.fillStyle=this.color;
+            ctx.beginPath();
+            ctx.arc(this.x,this.y,3,0,Math.PI*2);
+            ctx.fill();
         }
     }
 }
 
-class Particle {
-    constructor(x, y, color) {
-        const a = Math.random() * Math.PI * 2;
-        const s = Math.random() * 4 + 2;
-        this.vx = Math.cos(a) * s;
-        this.vy = Math.sin(a) * s;
-        this.x = x;
-        this.y = y;
-        this.life = 60;
-        this.color = color;
+class Particle{
+    constructor(x,y,color){
+        const angle=Math.random()*Math.PI*2;
+        const speed=Math.random()*6+2;
+        this.x=x;
+        this.y=y;
+        this.vx=Math.cos(angle)*speed;
+        this.vy=Math.sin(angle)*speed;
+        this.life=70;
+        this.color=color;
     }
-    update() {
-        this.x += this.vx;
-        this.y += this.vy;
-        this.vy += 0.03;
+    update(){
+        this.x+=this.vx;
+        this.y+=this.vy;
+        this.vy+=0.05;
         this.life--;
     }
-    draw() {
-        fwCtx.globalAlpha = this.life / 60;
-        fwCtx.fillStyle = this.color;
-        fwCtx.beginPath();
-        fwCtx.arc(this.x, this.y, 2.3, 0, Math.PI * 2);
-        fwCtx.fill();
-        fwCtx.globalAlpha = 1;
+    draw(){
+        ctx.globalAlpha=this.life/70;
+        ctx.fillStyle=this.color;
+        ctx.beginPath();
+        ctx.arc(this.x,this.y,2.5,0,Math.PI*2);
+        ctx.fill();
+        ctx.globalAlpha=1;
     }
 }
 
-let fireworks = [];
-
-/* ===== HOA ĐÀO ===== */
-class Sakura {
-    constructor() { this.reset(); }
-    reset() {
-        this.x = Math.random() * sk.width;
-        this.y = Math.random() * -sk.height;
-        this.size = Math.random() * 5 + 5;
-        this.vy = Math.random() * 1 + 0.5;
-        this.vx = Math.random() * 0.8 - 0.4;
-        this.angle = Math.random() * Math.PI * 2;
+/* ===== KIM TUYẾN ===== */
+class Sparkle{
+    constructor(){ this.reset(); }
+    reset(){
+        this.x=Math.random()*canvas.width;
+        this.y=Math.random()*canvas.height;
+        this.size=Math.random()*2+1;
+        this.speed=Math.random()*1+0.5;
     }
-    update() {
-        this.y += this.vy;
-        this.x += this.vx;
-        this.angle += 0.01;
-        if (this.y > sk.height) this.reset();
+    update(){
+        this.y+=this.speed;
+        if(this.y>canvas.height) this.reset();
     }
-    draw() {
-        skCtx.save();
-        skCtx.translate(this.x, this.y);
-        skCtx.rotate(this.angle);
-        skCtx.fillStyle = "#ffb7c5";
-        skCtx.beginPath();
-        for (let i = 0; i < 5; i++) {
-            skCtx.lineTo(
-                Math.cos((18 + i * 72) * Math.PI / 180) * this.size,
-                -Math.sin((18 + i * 72) * Math.PI / 180) * this.size
-            );
-            skCtx.lineTo(
-                Math.cos((54 + i * 72) * Math.PI / 180) * this.size / 2,
-                -Math.sin((54 + i * 72) * Math.PI / 180) * this.size / 2
-            );
-        }
-        skCtx.closePath();
-        skCtx.fill();
-        skCtx.restore();
+    draw(){
+        ctx.fillStyle="gold";
+        ctx.beginPath();
+        ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
+        ctx.fill();
     }
 }
 
-const sakuraCount = window.innerWidth < 500 ? 22 : 35;
-const sakuras = Array.from({ length: sakuraCount }, () => new Sakura());
+let fireworks=[];
+let sparkles=Array.from({length:60},()=>new Sparkle());
 
-function animate() {
-    fwCtx.clearRect(0, 0, fw.width, fw.height);
-    skCtx.clearRect(0, 0, sk.width, sk.height);
+window.addEventListener("click",(e)=>{
+    fireworks.push(new Firework(e.clientX,e.clientY));
+});
 
-    if (Math.random() < 0.04) fireworks.push(new Firework());
+function animate(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
 
-    fireworks.forEach((f, i) => {
+    if(Math.random()<0.04){
+        fireworks.push(new Firework());
+    }
+
+    fireworks.forEach((f,i)=>{
         f.update();
         f.draw();
-        if (f.exploded) {
-            f.particles.forEach((p, pi) => {
+        if(f.exploded){
+            f.particles.forEach((p,pi)=>{
                 p.update();
                 p.draw();
-                if (p.life <= 0) f.particles.splice(pi, 1);
+                if(p.life<=0) f.particles.splice(pi,1);
             });
-            if (f.particles.length === 0) fireworks.splice(i, 1);
+            if(f.particles.length===0) fireworks.splice(i,1);
         }
     });
 
-    sakuras.forEach(s => {
-        s.update();
-        s.draw();
-    });
+    sparkles.forEach(s=>{s.update();s.draw();});
 
     requestAnimationFrame(animate);
 }
 animate();
+
+/* ===== POPUP ===== */
+function openWish(){
+    document.getElementById("popup").classList.add("show");
+}
+function closeWish(){
+    document.getElementById("popup").classList.remove("show");
+}
+
+/* Mobile autoplay fix */
+document.addEventListener("click",()=>{
+    document.getElementById("music").play();
+},{once:true});
 </script>
 
 </body>
